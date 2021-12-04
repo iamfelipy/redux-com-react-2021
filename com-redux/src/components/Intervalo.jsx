@@ -1,16 +1,15 @@
 import './Intervalo.css';
 import React from 'react';
 import Card from './Card';
+import {connect} from 'react-redux';
+import {alterarNumeroMinimo} from '../store/actions/numeros';
+import {alterarNumeroMaximo} from '../store/actions/numeros';
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default props => {
-
+function Intervalo(props) {
     
-    const onMinChanged = ()=>{}; 
-    const onMaxChanged = () => {};
-    const min = 1;
-    const max = 2
-
+    const {min,max} = props;
+    
     return (
         <Card 
             red
@@ -21,7 +20,7 @@ export default props => {
                     <strong>Mínimo</strong>
                     <input 
                         type="number" 
-                        onChange={(e)=>onMinChanged(+e.target.value)}
+                        onChange={(e)=>props.alterarMinimo(+e.target.value)}
                         value={min}
                     />
                 </span>
@@ -29,7 +28,7 @@ export default props => {
                     <strong>Máximo</strong>
                     <input 
                         type="number" 
-                        onChange={(e)=>onMaxChanged(+e.target.value)}
+                        onChange={(e)=>props.alterarMaximo(+e.target.value)}
                         value={max}
                     />
                 </span>
@@ -37,3 +36,28 @@ export default props => {
         </Card>
     );
 }
+
+function mapStateToProps(state){
+  return {
+    min: state.numeros.min,
+    max: state.numeros.max
+  }
+}
+
+function mapDispatchToProp(dispatch){
+  return {
+    alterarMinimo(novoNumero){
+      const action = alterarNumeroMinimo(novoNumero);
+      dispatch(action)
+    },
+    alterarMaximo(novoNumero){
+      const action = alterarNumeroMaximo(novoNumero);
+      dispatch(action)
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProp
+)(Intervalo);
